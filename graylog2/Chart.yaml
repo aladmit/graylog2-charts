@@ -1,0 +1,6 @@
+name: graylog2
+version: 0.1.0
+description: OTUS sample reddit application
+maintainers:
+  - name: Andrey Aleksandrov
+    email: aaleksandrov@express42.com

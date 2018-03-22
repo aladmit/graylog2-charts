@@ -1,0 +1,6 @@
+name: graylog2-server
+version: 0.0.1
+description: Graylog2
+maintainers:
+  - name: Andrey Aleksandrov
+    email: aaleksandrov@express42.com

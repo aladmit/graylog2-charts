@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  labels:
+    app: graylog
+    component: ui
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graylog
+      component: ui
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: graylog
+        component: ui
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - image: graylog2/server:2.4.3-1
+          name: graylog
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+          volumeMounts:
+            - name: graylog2-configs
+              mountPath: /usr/share/graylog/data/config
+      volumes:
+        - name: graylog2-configs
+          configMap:
+            name: graylog2-configs

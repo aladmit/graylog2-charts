@@ -1,0 +1,12 @@
+dependencies:
+- name: graylog2-server
+  repository: file://../graylog2-server
+  version: 0.0.1
+- name: mongodb
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 0.4.18
+- name: elasticsearch
+  repository: file://../elasticsearch
+  version: 0.0.1
+digest: sha256:fac956fc34fd5864a1a09f023c51896a8f2ec9280c6e1d5a9abe29dbe6fabb76
+generated: 2018-03-22T22:26:01.036961496+03:00

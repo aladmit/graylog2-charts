@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - image: docker.elastic.co/elasticsearch/elasticsearch:5.3.3
+          name: elasticsearch
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+              subPath: elasticsearch.yml
+              name: {{ .Chart.Name }}-configs
+      volumes:
+        - name: {{ .Chart.Name }}-configs
+          configMap:
+            name: {{ .Chart.Name }}-configs
+            items:
+              - key: elasticsearch
+                path: elasticsearch.yml

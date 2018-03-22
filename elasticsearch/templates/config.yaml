@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configs
+data:
+  elasticsearch: |
+    cluster.name: "docker-cluster"
+    network.host: 0.0.0.0
+    discovery.zen.minimum_master_nodes: 1
+    xpack.security.enabled: false

@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: graylog2-configs
+data:
+  graylog.conf: |
+    is_master = true
+    node_id_file = /usr/share/graylog/data/config/node-id
+    password_secret = replacethiswithyourownsecret!
+    root_password_sha2 = 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+    plugin_dir = /usr/share/graylog/plugin
+    web_endpoint_uri = http://0.0.0.0:9000/api/
+    web_enable_cors = true
+    rotation_strategy = count
+    elasticsearch_max_docs_per_index = 20000000
+    elasticsearch_max_number_of_indices = 20
+    retention_strategy = delete
+    elasticsearch_shards = 4
+    elasticsearch_replicas = 0
+    elasticsearch_index_prefix = graylog
+    allow_leading_wildcard_searches = true
+    allow_highlighting = true
+    elasticsearch_cluster_name = graylog
+    elasticsearch_transport_tcp_port = 9350
+    elasticsearch_http_enabled = false
+    elasticsearch_discovery_zen_ping_multicast_enabled = false
+    elasticsearch_discovery_zen_ping_unicast_hosts = {{ .Release.Name }}-elasticsearch:9200
+    elasticsearch_hosts = http://{{ .Release.Name }}-elasticsearch:9200/
+    elasticsearch_network_host = 0.0.0.0
+    elasticsearch_analyzer = standard
+    output_batch_size = 500
+    output_fault_count_threshold = 5
+    output_fault_penalty_seconds = 30
+    processbuffer_processors = 5
+    outputbuffer_processors = 3
+    processor_wait_strategy = blocking
+    ring_size = 65536
+    inputbuffer_ring_size = 65536
+    inputbuffer_processors = 2
+    inputbuffer_wait_strategy = blocking
+    message_journal_enabled = true
+    message_journal_dir = /usr/share/graylog/data/journal
+    lb_recognition_period_seconds = 3
+    mongodb_uri = mongodb://{{ .Release.Name }}-mongodb/graylog
+    mongodb_max_connections = 100
+    mongodb_threads_allowed_to_block_multiplier = 5
+    content_packs_loader_enabled = true
+    content_packs_dir = /usr/share/graylog/data/contentpacks
+    content_packs_auto_load = grok-patterns.json
+  log4j2.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Configuration packages="org.graylog2.log4j">
+        <Appenders>
+            <Console name="STDOUT" target="SYSTEM_OUT">
+                <PatternLayout pattern="%d %-5p: %c - %m%n"/>
+            </Console>
+            <Memory name="graylog-internal-logs" bufferSize="500"/>
+        </Appenders>
+        <Loggers>
+            <Logger name="org.graylog2" level="info"/>
+            <Logger name="com.github.joschi.jadconfig" level="warn"/>
+            <Logger name="org.apache.directory.api.ldap.model.message.BindRequestImpl" level="error"/>
+            <Logger name="org.elasticsearch.script" level="warn"/>
+            <Logger name="org.graylog2.periodical.VersionCheckThread" level="off"/>
+            <Logger name="org.drools.compiler.kie.builder.impl.KieRepositoryImpl" level="warn"/>
+            <Logger name="com.joestelmach.natty.Parser" level="warn"/>
+            <Logger name="kafka.log.Log" level="warn"/>
+            <Logger name="kafka.log.OffsetIndex" level="warn"/>
+            <Root level="warn">
+                <AppenderRef ref="STDOUT"/>
+                <AppenderRef ref="graylog-internal-logs"/>
+            </Root>
+        </Loggers>
+    </Configuration>
